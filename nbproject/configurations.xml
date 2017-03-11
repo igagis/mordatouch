@@ -9,6 +9,7 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>nbproject/private/launcher.properties</itemPath>
+      <itemPath>makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
@@ -30,7 +31,7 @@
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
           <buildCommand>make -j8</buildCommand>
           <cleanCommand>make clean</cleanCommand>
-          <executablePath></executablePath>
+          <executablePath>mordatouch</executablePath>
           <ccTool>
             <incDir>
               <pElem>.</pElem>
