@@ -1,5 +1,7 @@
 include prorab.mk
 
+include $(d)raspberrypi.mk
+
 this_name := mordatouch
 
 this_srcs += $(call prorab-src-dir,src)
@@ -14,6 +16,11 @@ this_cxxflags += -Wfatal-errors # stop on first error encountered
 this_cxxflags += -fstrict-aliasing #strict aliasing (in order to comply with the c++ standard more strictly)
 this_cxxflags += -g #include debugging symbols
 this_cxxflags += -std=c++11
+
+ifeq ($(raspberrypi),true)
+    this_cxxflags += -I/opt/vc/include
+    this_ldflags += -L/opt/vc/lib
+endif
 
 this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -lGLESv2 -rdynamic
 
