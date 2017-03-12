@@ -2,6 +2,10 @@
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="src" name="0">
+      <in>Page.cpp</in>
+      <in>Page.hpp</in>
+      <in>PageStack.cpp</in>
+      <in>PageStack.hpp</in>
       <in>main.cpp</in>
     </df>
     <logicalFolder name="ExternalFiles"
@@ -43,6 +47,14 @@
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
+      <item path="src/Page.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Page.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/PageStack.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/PageStack.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
