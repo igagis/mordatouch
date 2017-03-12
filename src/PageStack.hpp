@@ -1,21 +1,28 @@
 #pragma once
 
-#include <morda/widgets/core/container/Container.hpp>
-
-#include "Page.hpp"
+#include <morda/widgets/core/container/Frame.hpp>
 
 namespace morda{
 
-class PageStack : private Container, public virtual Widget{
+class Page;
+
+class PageStack : private Frame, public virtual Widget{
+	friend class Page;
+	
+	std::vector<std::shared_ptr<Page>> pages;
 public:
-	PageStack();
+	PageStack(const stob::Node* chain = nullptr);
 	
 	PageStack(const PageStack&) = delete;
 	PageStack& operator=(const PageStack&) = delete;
 	
 
+	void push(std::shared_ptr<Page> page);
+	
+	~PageStack()noexcept;
 private:
 
+	void pop()noexcept;
 };
 
 }

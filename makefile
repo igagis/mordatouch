@@ -22,6 +22,6 @@ ifeq ($(raspberrypi),true)
     this_ldflags += -L/opt/vc/lib
 endif
 
-this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -lGLESv2 -rdynamic
+this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -lGLESv2 -rdynamic -lm
 
 $(eval $(prorab-build-app))

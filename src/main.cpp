@@ -1,6 +1,9 @@
 #include <mordavokne/AppFactory.hpp>
 #include <morda/widgets/button/SimpleButton.hpp>
 
+#include "PageStack.hpp"
+#include "Page.hpp"
+#include "MainPage.hpp"
 
 
 class Application : public mordavokne::App{
@@ -13,18 +16,24 @@ public:
 	Application() :
 			App(GetWindowParams())
 	{
-		morda::Morda::inst().initStandardWidgets(*this->createResourceFileInterface());
+		morda::inst().initStandardWidgets(*this->createResourceFileInterface());
 		
-//		morda::Morda::inst().resMan.mountResPack(*this->createResourceFileInterface("res/"));
+		morda::inst().resMan.mountResPack(*this->createResourceFileInterface("res/"));
 //		this->ResMan().MountResPack(morda::ZipFile::New(papki::FSFile::New("res.zip")));
 		
-//		std::shared_ptr<morda::Widget> c = morda::Morda::inst().inflater.inflate(
-//				*this->createResourceFileInterface("res/test.gui.stob")
+		morda::inst().inflater.addWidget<morda::PageStack>("PageStack");
+		
+//		auto c = morda::Morda::inst().inflater.inflate(
+//				*this->createResourceFileInterface("res/main.gui.stob")
 //			);
-//		morda::Morda::inst().setRootWidget(c);
-		morda::Morda::inst().setRootWidget(
-				morda::inst().inflater.inflate(*stob::parse("PushButton{TextLabel{text{Hello}}}"))
-			);
+		auto ps = utki::makeShared<morda::PageStack>();
+		morda::Morda::inst().setRootWidget(ps);
+		
+		ps->push(utki::makeShared<MainPage>());
+		
+//		morda::Morda::inst().setRootWidget(
+//				morda::inst().inflater.inflate(*stob::parse("PushButton{TextLabel{text{Hello}}}"))
+//			);
 	}
 };
 

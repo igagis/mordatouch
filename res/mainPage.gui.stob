@@ -1,0 +1,7 @@
+PushButton{
+	name{main_button}
+
+	TextLabel{
+		text{Hello!}
+	}
+}
