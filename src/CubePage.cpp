@@ -130,9 +130,7 @@ CubePage::CubePage() :
 	
 	this->getLayoutParams(*c).dim.set(morda::Widget::LayoutParams::fill_c);
 	
-	this->add(c);
-	
-	//TODO: replace by cube
+	ph->replaceBy(c);
 }
 
 void CubePage::onShow() {
