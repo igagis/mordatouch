@@ -89,6 +89,7 @@ public:
 			this->fpsSecCounter = 0;
 			this->fps = 0;
 		}
+		this->clearCache();
 	}
 	
 	void render(const morda::Matr4r& matrix)const override{
@@ -129,6 +130,8 @@ CubePage::CubePage() :
 	this->cube = c;
 	
 	this->getLayoutParams(*c).dim.set(morda::Widget::LayoutParams::fill_c);
+	
+	c->setCache(true);
 	
 	ph->replaceBy(c);
 }
