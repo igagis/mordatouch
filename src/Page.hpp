@@ -18,6 +18,8 @@ public:
 	virtual void onShow(){}
 	virtual void onHide(){}
 	virtual void onClose()noexcept{}
+	
+	void close()noexcept;
 private:
 
 };

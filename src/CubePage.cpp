@@ -6,6 +6,7 @@
 #include <morda/Morda.hpp>
 
 #include <GLES2/gl2.h>
+#include <morda/widgets/button/Button.hpp>
 
 namespace{
 
@@ -120,16 +121,32 @@ public:
 CubePage::CubePage() :
 		Widget(nullptr),
 		Frame(stob::parse(R"qwertyuiop(
-				Widget{name{placeholder}}
-				TextLabel{text{"cube page"}}
+				VerticalArea{
+					layout{
+						dx{fill}dy{fill}
+					}
+					Widget{
+						name{placeholder}
+						layout{dx{fill}dy{0}weight{1}}
+					}
+					TextLabel{text{"cube page"}}
+					PushButton{
+						TextLabel{
+							text{back}
+						}
+						name{back_button}
+					}
+				}
 			)qwertyuiop").get())
 {
 	auto ph = this->findChildByName("placeholder");
 	
+	this->findChildByNameAs<morda::PushButton>("back_button")->clicked = [this](morda::PushButton&){
+		this->close();
+	};
+	
 	auto c = utki::makeShared<CubeWidget>(nullptr);
 	this->cube = c;
-	
-	this->getLayoutParams(*c).dim.set(morda::Widget::LayoutParams::fill_c);
 	
 	c->setCache(true);
 	

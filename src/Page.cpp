@@ -1,3 +1,5 @@
+#include <morda/Morda.hpp>
+
 #include "Page.hpp"
 
 
@@ -16,4 +18,11 @@ PageStack& Page::parentPageStack() {
 
 Page::Page(const stob::Node* chain) :
 		Widget(chain)
-{}
+{
+}
+
+void Page::close()noexcept{
+	morda::inst().postToUiThread_ts([this](){
+		this->parentPageStack().close(*this);
+	});
+}

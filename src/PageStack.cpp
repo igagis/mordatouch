@@ -38,7 +38,17 @@ void PageStack::push(std::shared_ptr<Page> page) {
 	});
 }
 
-void PageStack::pop()noexcept{
+void PageStack::close(Page& page)noexcept{
+	ASSERT(&page.parentPageStack() != this)
+	
+	for(auto i = this->pages.begin(), e = this->pages.end(); i != e; ++i){
+		if((*i).operator->() == &page){
+			(*i)->onClose();
+			this->pages.erase(i);
+			return;
+		}
+	}
+	
 	if(this->children().size() == 0){
 		return;
 	}
@@ -46,6 +56,8 @@ void PageStack::pop()noexcept{
 	ASSERT(this->children().size() == 1)
 	auto p = std::dynamic_pointer_cast<Page>(this->remove(this->children().begin()));
 	ASSERT(p)
+	ASSERT(p.operator->() == &page)
+	
 	p->onClose();
 	
 	if(this->pages.size() != 0){

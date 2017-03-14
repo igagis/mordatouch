@@ -16,13 +16,12 @@ public:
 	PageStack(const PageStack&) = delete;
 	PageStack& operator=(const PageStack&) = delete;
 	
-
 	void push(std::shared_ptr<Page> page);
 	
 	~PageStack()noexcept;
 private:
 
-	void pop()noexcept;
+	void close(Page& page)noexcept;
 };
 
 }
