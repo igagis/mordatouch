@@ -17,11 +17,14 @@ this_cxxflags += -fstrict-aliasing #strict aliasing (in order to comply with the
 this_cxxflags += -g #include debugging symbols
 this_cxxflags += -std=c++11
 
+this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -rdynamic -lm
+
 ifeq ($(raspberrypi),true)
     this_cxxflags += -I/opt/vc/include
     this_ldflags += -L/opt/vc/lib
+    this_ldlibs += -lbrcmGLESv2
+else
+    this_ldlibs += -lGLESv2
 endif
-
-this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -lGLESv2 -rdynamic -lm
 
 $(eval $(prorab-build-app))
