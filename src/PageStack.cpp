@@ -9,7 +9,7 @@ using namespace morda;
 
 PageStack::PageStack(const stob::Node* chain) :
 		Widget(chain),
-		Frame(nullptr)
+		Pile(nullptr)
 {
 	
 }

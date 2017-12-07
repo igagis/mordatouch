@@ -4,9 +4,9 @@
 #include <morda/resources/ResTexture.hpp>
 #include <morda/render/Renderer.hpp>
 #include <morda/Morda.hpp>
+#include <morda/widgets/button/PushButton.hpp>
 
 #include <GLES2/gl2.h>
-#include <morda/widgets/button/Button.hpp>
 
 namespace{
 
@@ -108,7 +108,7 @@ public:
 
 		glEnable(GL_CULL_FACE);
 		
-		morda::inst().renderer().shader->posTex->render(m, this->tex->tex(), *this->cubeVAO);
+		morda::inst().renderer().shader->posTex->render(m, *this->cubeVAO, this->tex->tex());
 		
 		glDisable(GL_CULL_FACE);
 	}
@@ -120,7 +120,7 @@ public:
 
 CubePage::CubePage() :
 		Widget(nullptr),
-		Frame(stob::parse(R"qwertyuiop(
+		Pile(stob::parse(R"qwertyuiop(
 				VerticalArea{
 					layout{
 						dx{fill}dy{fill}

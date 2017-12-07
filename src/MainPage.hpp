@@ -1,12 +1,12 @@
 #pragma once
 
-#include <morda/widgets/core/container/Frame.hpp>
+#include <morda/widgets/core/container/Pile.hpp>
 
 #include "Page.hpp"
 
 class MainPage :
 		public morda::Page,
-		private morda::Frame
+		private morda::Pile
 {
 public:
 	MainPage();

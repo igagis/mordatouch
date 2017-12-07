@@ -1,5 +1,5 @@
 #include <mordavokne/AppFactory.hpp>
-#include <morda/widgets/button/SimpleButton.hpp>
+#include <morda/widgets/button/NinePatchPushButton.hpp>
 
 #include "PageStack.hpp"
 #include "Page.hpp"
@@ -16,9 +16,9 @@ public:
 	Application() :
 			App(GetWindowParams())
 	{
-		morda::inst().initStandardWidgets(*this->createResourceFileInterface());
+		morda::inst().initStandardWidgets(*this->getResFile());
 		
-		morda::inst().resMan.mountResPack(*this->createResourceFileInterface("res/"));
+		morda::inst().resMan.mountResPack(*this->getResFile("res/"));
 //		this->ResMan().MountResPack(morda::ZipFile::New(papki::FSFile::New("res.zip")));
 		
 		morda::inst().inflater.addWidget<morda::PageStack>("PageStack");

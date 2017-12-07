@@ -1,11 +1,14 @@
 #pragma once
 
-#include <morda/widgets/core/container/Frame.hpp>
+#include <morda/widgets/core/container/Pile.hpp>
 #include <morda/Updateable.hpp>
 
 #include "Page.hpp"
 
-class CubePage : public morda::Page, public morda::Frame{
+class CubePage :
+		public morda::Page,
+		public morda::Pile
+{
 	std::shared_ptr<morda::Updateable> cube;
 public:
 	CubePage();

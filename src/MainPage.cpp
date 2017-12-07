@@ -1,5 +1,5 @@
 #include <mordavokne/App.hpp>
-#include <morda/widgets/button/Button.hpp>
+#include <morda/widgets/button/PushButton.hpp>
 
 #include "MainPage.hpp"
 
@@ -7,7 +7,7 @@
 
 MainPage::MainPage() :
 		Widget(nullptr),
-		Frame(stob::load(*mordavokne::inst().createResourceFileInterface("res/mainPage.gui.stob")).get())
+		Pile(stob::load(*mordavokne::inst().getResFile("res/mainPage.gui.stob")).get())
 {
 	auto b = this->findChildByNameAs<morda::PushButton>("main_button");
 	b->clicked = [this](morda::PushButton& b){
