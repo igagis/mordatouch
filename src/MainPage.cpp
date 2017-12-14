@@ -7,7 +7,7 @@
 
 MainPage::MainPage() :
 		Widget(nullptr),
-		Pile(stob::load(*mordavokne::inst().getResFile("res/mainPage.gui.stob")).get())
+		Pile(stob::load(*mordavokne::inst().getResFile("res/mainPage.gui")).get())
 {
 	auto b = this->findChildByNameAs<morda::PushButton>("main_button");
 	b->clicked = [this](morda::PushButton& b){

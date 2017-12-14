@@ -1,7 +1,7 @@
 PushButton{
 	name{main_button}
 
-	TextLabel{
+	Text{
 		text{Hello!}
 	}
 }

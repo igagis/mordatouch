@@ -99,6 +99,8 @@ public:
 		morda::Matr4r matr(matrix);
 		matr.scale(this->rect().d / 2);
 		matr.translate(1, 1);
+		matr.scale(1, -1);
+		
 		matr.frustum(-2, 2, -1.5, 1.5, 2, 100);
 		
 		morda::Matr4r m(matr);
@@ -121,7 +123,7 @@ public:
 CubePage::CubePage() :
 		Widget(nullptr),
 		Pile(stob::parse(R"qwertyuiop(
-				VerticalArea{
+				Column{
 					layout{
 						dx{fill}dy{fill}
 					}
@@ -129,9 +131,9 @@ CubePage::CubePage() :
 						name{placeholder}
 						layout{dx{fill}dy{0}weight{1}}
 					}
-					TextLabel{text{"cube page"}}
+					Text{text{"cube page"}}
 					PushButton{
-						TextLabel{
+						Text{
 							text{back}
 						}
 						name{back_button}
