@@ -1,6 +1,6 @@
 #pragma once
 
-#include <morda/widgets/core/Widget.hpp>
+#include <morda/widgets/Widget.hpp>
 
 #include "PageStack.hpp"
 

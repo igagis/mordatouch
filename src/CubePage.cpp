@@ -1,7 +1,7 @@
 #include "CubePage.hpp"
 
 #include <morda/Updateable.hpp>
-#include <morda/resources/ResTexture.hpp>
+#include <morda/res/ResTexture.hpp>
 #include <morda/render/Renderer.hpp>
 #include <morda/Morda.hpp>
 #include <morda/widgets/button/PushButton.hpp>
@@ -141,9 +141,9 @@ CubePage::CubePage() :
 				}
 			)qwertyuiop").get())
 {
-	auto ph = this->findChildByName("placeholder");
+	auto ph = this->findByName("placeholder");
 	
-	this->findChildByNameAs<morda::PushButton>("back_button")->clicked = [this](morda::PushButton&){
+	this->findByNameAs<morda::PushButton>("back_button")->clicked = [this](morda::PushButton&){
 		this->close();
 	};
 	

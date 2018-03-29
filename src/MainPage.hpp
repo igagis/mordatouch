@@ -1,6 +1,6 @@
 #pragma once
 
-#include <morda/widgets/core/container/Pile.hpp>
+#include <morda/widgets/group/Pile.hpp>
 
 #include "Page.hpp"
 

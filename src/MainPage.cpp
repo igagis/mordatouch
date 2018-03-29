@@ -9,7 +9,7 @@ MainPage::MainPage() :
 		Widget(nullptr),
 		Pile(stob::load(*mordavokne::inst().getResFile("res/mainPage.gui")).get())
 {
-	auto b = this->findChildByNameAs<morda::PushButton>("main_button");
+	auto b = this->findByNameAs<morda::PushButton>("main_button");
 	b->clicked = [this](morda::PushButton& b){
 		this->parentPageStack().push(utki::makeShared<CubePage>());
 	};
