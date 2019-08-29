@@ -1,0 +1,194 @@
+# build only master branch and version tags
+branches:
+  only:
+  - master
+  - /^\d*\.\d*\.\d*$/
+
+sudo: required
+
+services:
+- docker
+
+language: cpp
+dist: xenial
+os: linux
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'deb http://dl.bintray.com/igagis/ubuntu xenial main'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x379CE192D401AB61'
+    update: true
+    packages:
+    - binfmt-support
+    - qemu-user-static
+    - myci
+
+matrix:
+  include:
+    - name: macosx
+      os: osx
+      compiler: clang
+      osx_image: xcode8.3
+    - name: ios
+      os: osx
+      compiler: clang
+      osx_image: xcode8.3
+    - name: android
+      language: android
+      android:
+        components:
+          - platform-tools
+          - tools
+          - build-tools-28.0.3
+          - android-28
+#          - sys-img-armeabi-v7a-android-22
+          - extra-android-m2repository
+
+env:
+  global:
+  # Encrypted MYCI_BINTRAY_API_KEY for publishing to bintray.
+  - secure: "WH1fn4c0VIqZ9cgvnDNvRzrWOj8xEnVSKalX44GIPop2/8z09q2uvefyaVXlAdWDmwj5LNtrzDWxN/MuzIjh5cb3CQ71B1yo2XsbDausV36bF5EhCepfYj0+V3jZeFMzf7p1/BU5xdcQI/9JosV5pn/klzDB95RQUgQRa55+eoYUpGhuBDxoDmCHCozmrKBk/6WjIdg/jtkg86kLXIGdkkk/BPZWpAmMe3zf18jLVA3A8xeE2UYMxmwWYPWTDyL5W4mTu/MOY0M3gFqv92amM1mNoq1kFBCe73JShenAd1qnik7divw6gzVWgyEou40OPPLebKA5y6lax3zM6+3iLrLJxtAlfrjwvaiwsVO4dn3CIH/a1ppBsTOQMqaZsHfXKeqg/GUAKuj0EeQEtl05BTCEYF5iFt7uB02HbqCSiop4yOlgkRCtu8hH1hjPb4GnIdZRRIJ8F9lFnQbf5bunk2fdQjYinEg6jBefVz1c/Td5I1jzBxB6ds01nRZNFhl7VR+YI/oCaSz513m/cGdHDU/5G5qD7fCt4mHIBHESqKmMoJNz107yzbZFNehkMdCiKjTyr5XcstHgalcRPdyuJHScffOxtO7UiRH+lfQxFvRyN16dfDm4hOY1YkZWktA2L7nAXCrXXVG1wHN5mr3Sq1I799IDgxcNthPbt2l15gs="
+  # Encrypted MYCI_GIT_ACCESS_TOKEN for publishing to git-based repos.
+  - secure: "aaLyp8AAop58mGg/2MUkEiVMzQrH3HhjGYTvzFVUhBFm7zn91h/jR3PI7yujWKMbkf5Yn6zwjDUSrfl6o/rbWcHXY4CRjiF8FvD0ADTu0+UDhVzDxX5bccjGPQpan+yO8iK4gl8Niw9GOafDEG4uopt6AkmyIwwzXb8q0Sy5L5bbI9VA5gdBdfVC4HoywulBkxe6Ti2X9A/jk53szIB77w0NV8Yooh7GMJcAv+LFvt8klq2lr0FYU1sT+/h6xM4453BM+/OPkJeDuOrM+Bw97Baxs9HlCNKaUrPgeYfNzybt97/5pA/w9m6Y1xmsY0M7uKj7YpuiPG6AecOu/0IqGm3KbYKFlw3ISCYtbMC/XSIkJitgseLBJqpW/sW6tyhV57h3xnt8bnePOwG4IHh+ta6UnMXJo6uIS3sWEQm/HtUSET4FIpaBoPpPcYU+pmxF2l5pS3n7VW1YqSKVdXtM3UhrhAhR7ll4wf8rJAPgI5qSeILtBGjuKfw/ALiEGIwdvrtyNx/Nr2B4MryoGlBIesCQIqfOHov9JLDwtrsJf+t+bER0nN1hypPuYytIdOFVt8w44YGNOm+4Ccs2WELx4FlqszFnm6OmxpCX6YVVw/6uLnXw3NbryJXJcASbj5oq+eO2xm3DC8V51hsEXZVM9IsSYVtdBpZs8gMSSws1/dQ="
+  - MYCI_GIT_USERNAME=igagis
+  - PACKAGE_NAME=mordatouch
+  matrix:
+  - OS_REL=xenial OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
+  - OS_REL=bionic OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
+  - OS_REL=stretch OS=debian DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
+  - OS_REL=stretch OS=raspbian DOCKER_IMAGE=igagis/$OS:$OS_REL PACKAGE_TYPE=deb
+
+
+
+before_install:
+- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
+    docker run --name ccc -v $TRAVIS_BUILD_DIR/..:/build -w /build/$(basename $TRAVIS_BUILD_DIR) -it -d $DOCKER_IMAGE bash &&
+    if [ "$PACKAGE_TYPE" == "deb" ]; then
+      docker exec ccc apt update &&
+      docker exec ccc apt install -y dirmngr &&
+      docker exec ccc bash -c "echo 'deb http://dl.bintray.com/igagis/$OS $OS_REL main' > /etc/apt/sources.list.d/igagis.list" &&
+      docker exec ccc apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
+      docker exec ccc apt update &&
+      docker exec ccc apt install -y devscripts equivs myci &&
+      myci-deb-prepare.sh;
+    fi;
+  fi
+- if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
+    rvm install ruby-2.3.3 &&
+    rvm use ruby-2.3.3 &&
+
+    brew update > /dev/null &&
+    brew tap igagis/tap &&
+    brew update > /dev/null &&
+    brew install myci prorab prorab-extra libutki libpapki libunikod libstob libsvgren z glew freetype libkolme libnitki libpng;
+  fi
+- if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
+    rvm install ruby-2.3.3 &&
+    rvm use ruby-2.3.3 &&
+
+    brew update > /dev/null &&
+    brew tap igagis/tap &&
+    brew update > /dev/null &&
+    brew install myci &&
+    brew install --force openssl &&
+
+    sudo gem install cocoapods &&
+    pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
+    pod install --project-directory=ios;
+  fi
+
+install:
+- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
+    docker exec ccc myci-deb-install-build-deps.sh;
+  fi
+# Accept android SDK licenses and install android tools
+- if [ "$TRAVIS_JOB_NAME" == "android" ]; then
+    echo y | sdkmanager "ndk-bundle" &&
+    echo y | sdkmanager "cmake;3.6.4111459";
+  fi
+
+before_script:
+- if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
+    curl -L https://github.com/zackslash/Xcode-Proj-Adder/raw/master/bin/XcodeProjAdder -O &&
+    chmod +x XcodeProjAdder &&
+    (cd ios/morda_test.xcodeproj && ../../XcodeProjAdder -XCP ../morda_test.xcodeproj -SCSV `echo $(find ../../src -type f -name *.cpp) | sed -n -e 's/ /,/gp'`) &&
+    (cd ios/morda_test.xcodeproj && ../../XcodeProjAdder -XCP ../morda_test.xcodeproj -SCSV `echo $(find ../../tests/app/src/opengles2 -type f -name *.cpp) | sed -n -e 's/ /,/gp'`);
+  fi
+
+script:
+- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
+    docker exec ccc dpkg-buildpackage -us -uc;
+  fi
+- if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
+    make && make test;
+  fi
+# need to reduce output from xcodebuild because log size on travis-ci is limited by 4Mb, use grep for errors and warnings
+# Also, need to set pipefail to make pipe exit code nono-zero in case first command fails but second succeeds (because grep exits with 0 always)
+- if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
+    set -o pipefail &&
+    xcodebuild -workspace ios/morda_test.xcworkspace -scheme morda_test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            | sed -e "s/export PATH=[^ ]*/%/g"
+            | sed -e "s/export LANG=en_US.US-ASCII/%/g"
+            | sed -e "s/[^ ]*\/clang /clang /g"
+            | sed -e "s/\(-[IWfFL]\)[^ ]*/%/g"
+            | sed -e "s/-isystem [^ ]*/%/g"
+            | sed -e "s/-include [^ ]*/%/g"
+            | sed -e "s/-MF [^ ]*/%/g"
+            | sed -e "s/-std=gnu++11/%/g"
+            | sed -e "s/-stdlib=libc++/%/g"
+            | sed -e "s/-gmodules/%/g"
+            | sed -e "s/-mdynamic-no-pic/%/g"
+            | sed -e "s/-DDEBUG=1/%/g"
+            | sed -e "s/-DCOCOAPODS=1/%/g"
+            | sed -e "s/-DPOD_CONFIGURATION_DEBUG=1/%/g"
+            | sed -e "s/Support\ Files\/[^ ]*.pch/%/g"
+            | sed -e "s/\/Users\/travis\/Library\/[^ ]*.hmap/%/g"
+            | sed -e "s/cd \/Users\/travis\/build[^ ]*\/Pods/%/g"
+            | sed -e "s/-miphoneos-version-min/%/g"
+            | sed -e "s/--serialize-diagnostics [^ ]*/%/g"
+            | sed -e "s/-o [^ ]*/%/g"
+            | sed -e "s/-iquote [^ ]*/%/g"
+            | sed -e "s/-isysroot [^ ]*/%/g";
+    if [ $? -ne 0 ]; then sleep 120; exit 1; fi;
+  fi
+- if [ "$TRAVIS_JOB_NAME" == "android" ]; then
+    (cd android && ./gradlew build) &&
+    myci-apply-version.sh -v `myci-deb-version.sh debian/changelog` android/*.pom.in &&
+    myci-apply-version.sh -v `myci-deb-version.sh debian/changelog` android/*.aar.in --filename-only;
+  fi
+
+
+before_deploy:
+  - myci-apply-version.sh -v `myci-deb-version.sh debian/changelog` travis_bintray_*.json.in
+
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $PACKAGE_TYPE = deb && -z "$TRAVIS_JOB_NAME"
+  script: myci-deploy-debian-bintray.sh -u igagis -r $OS -p $PACKAGE_NAME -c main -d $OS_REL $TRAVIS_BUILD_DIR/../*.deb
+- provider: bintray
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $TRAVIS_JOB_NAME = android
+  file: travis_bintray_android.json
+  user: igagis
+  key:
+    secure: "rSGVbQg1SsWDimup5ZKSQxbM9tm1mX6K+1SzBoKffPLH1aa3uVhFXFM2qFajp3fhqkB9vqNIVire7t3XbyNie2DN9rEF+inJeQlFpyrZKLC1obyyf01YHd0nPv+KxKPWCzinyZUPgw0lJQ11QjF5jSshKow1oX6Kk1RjKa/JOtMCac0Zwpx13hM13AmVNDsPGEX8zHzfWqooY9K+seTTwY+vVXrZkf8b2LP+LRRBw6T/R8ep00Hqa1xC/E5I4rpRlsr/4m50oFflRdCjvm9IlcfXNOiQruqTk/js8qZk0Nb7/c6wFdM2tU+veFMK5+6Zy/am04dHy/I+kKbjjh1UIFTLg1OziF7IVa//J8d0Bx1ytVUuNzk1VYIWg9JMGeAeP0mXAdsRQRRALPCppDrzzPWuRxIqot3YRUxggva4pzlmBO8zedO/2sGIknemUr4St01pAP1Cb9DtfSkwp4NRTq7qoeogUsHXeOo70aPFLCQUBWqvw0syHDcKj2NZ6ggMwzL0iLRfvhp5KRWWhdG7smwpJh9s+XITzdJyU9leSeHJyv67ORVM7bb5Qt+PRlpzmnhVLRYtNfu4nAPLHWX1blMd/t0W/Ep68tqCrOVsFonAqOBetXaIAR9iOHyBtBqnMwxvtjK4I+EiqG/hun3bbwlkOYuCq+eWbeE0J+sYRHM="
+  dry-run: false
+- provider: script
+  skip_cleanup: true
+  script: myci-deploy-homebrew.sh -t igagis/tap homebrew/libmorda.rb.in
+  on:
+    tags: true
+    condition: $TRAVIS_JOB_NAME = macosx
+- provider: script
+  skip_cleanup: true
+  script: rvm 2.3.3 do myci-deploy-cocoapods.sh -r igagis
+  on:
+    tags: true
+    condition: $TRAVIS_JOB_NAME = ios
