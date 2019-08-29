@@ -19,6 +19,8 @@ this_cxxflags += -std=c++11
 
 this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -rdynamic -lm
 
+this_ldlibs += $(d)../../src/build/libmordatouch.so
+
 this_out_dir := build
 
 ifeq ($(raspberrypi),true)
@@ -30,3 +32,20 @@ else
 endif
 
 $(eval $(prorab-build-app))
+
+$(prorab_this_name): $(abspath $(d)../../src/build/libmordatouch$(soext))
+
+
+
+
+define this_rules = 
+
+    run_app: $(proab_this_name)
+$(.RECIPEPREFIX)$(Q)(cd $(d) && LD_LIBRARY_PATH=../../src/build $(prorab_this_name))
+
+endef
+$(eval $(this_rules))
+
+
+
+$(eval $(call prorab-include, $(d)../../src/makefile))

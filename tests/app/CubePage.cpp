@@ -1,4 +1,4 @@
-#include "CubePage.hpp"
+#include "../../src/mordatouch/Page.hpp"
 
 #include <morda/Updateable.hpp>
 #include <morda/res/ResTexture.hpp>
@@ -7,6 +7,9 @@
 #include <morda/widgets/button/PushButton.hpp>
 
 #include <GLES2/gl2.h>
+
+
+#include "CubePage.hpp"
 
 namespace{
 
@@ -128,7 +131,7 @@ CubePage::CubePage() :
 						dx{fill}dy{fill}
 					}
 					Widget{
-						name{placeholder}
+						id{placeholder}
 						layout{dx{fill}dy{0}weight{1}}
 					}
 					Text{text{"cube page"}}
@@ -136,7 +139,7 @@ CubePage::CubePage() :
 						Text{
 							text{back}
 						}
-						name{back_button}
+						id{back_button}
 					}
 				}
 			)qwertyuiop").get())

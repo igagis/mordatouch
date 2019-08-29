@@ -1,8 +1,8 @@
 #include <mordavokne/AppFactory.hpp>
 #include <morda/widgets/button/NinePatchPushButton.hpp>
 
-#include "PageStack.hpp"
-#include "Page.hpp"
+#include "../../src/mordatouch/PageStack.hpp"
+#include "../../src/mordatouch/Page.hpp"
 #include "MainPage.hpp"
 
 

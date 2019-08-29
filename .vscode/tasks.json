@@ -20,7 +20,7 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "${workspaceFolder}/tests/app/build/mordatouch-test-app",
+            "command": "make run_app",
             "problemMatcher": [],
             "dependsOn": [
                 "build"

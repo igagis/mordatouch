@@ -1,5 +1,5 @@
 PushButton{
-	name{main_button}
+	id{main_button}
 
 	Text{
 		text{Hello!}
