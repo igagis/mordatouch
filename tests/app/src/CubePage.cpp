@@ -1,4 +1,4 @@
-#include "../../src/mordatouch/Page.hpp"
+#include "../../../src/mordatouch/Page.hpp"
 
 #include <morda/Updateable.hpp>
 #include <morda/res/ResTexture.hpp>

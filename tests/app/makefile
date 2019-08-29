@@ -4,7 +4,7 @@ include $(d)../../raspberrypi.mk
 
 this_name := mordatouch-test-app
 
-this_srcs += $(call prorab-src-dir,.)
+this_srcs += $(call prorab-src-dir,src)
 
 this_cxxflags += -Wall #enable all warnings
 this_cxxflags += -Wno-comment #no warnings on nested comments
