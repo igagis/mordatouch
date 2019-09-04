@@ -1,0 +1,9 @@
+Name: mordatouch   # human-readable name
+Description: C++ library of touchscreen-adapted libmorda widgets # human-readable description
+Version: $(version)
+URL: https://github.com/igagis/mordatouch
+Requires:
+Conflicts:
+Libs: -lmordatouch
+Libs.private:
+Cflags:
