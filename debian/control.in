@@ -1,0 +1,36 @@
+Source: libmordatouch
+Section: libs
+Priority: extra
+Maintainer: Ivan Gagis <igagis@gmail.com>
+Build-Depends: debhelper (>= 9), prorab,
+		libc6-dev, libmorda-dev
+Build-Depends-Indep: doxygen
+Standards-Version: 3.9.2
+
+Package: libmordatouch$(soname)
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: cross-platform C++ library.
+ Touchscreen-adapted widgets for libmorda.
+
+Package: libmordatouch$(soname)-dbg
+Section: debug
+Architecture: any
+Depends: libmordatouch$(soname) (= ${binary:Version}), ${misc:Depends}
+Description: debugging symbols for libmordatouch$(soname) package.
+
+Package: libmordatouch-dev
+Section: libdevel
+Architecture: any
+Depends: libmordatouch$(soname) (= ${binary:Version}), libmordatouch$(soname)-dbg (= ${binary:Version}), ${misc:Depends}
+Suggests: libmordatouch-doc
+Description: cross-platform C++ library.
+ Touchscreen-adapted widgets for libmorda.
+
+Package: libmordatouch-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: documentation for libmordatouch library.
+ For more details see description of libmordatouch-dev package.
