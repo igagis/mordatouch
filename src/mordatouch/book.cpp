@@ -6,14 +6,14 @@
 
 using namespace morda;
 
-PageStack::PageStack(std::shared_ptr<morda::context> c, const puu::forest& desc) :
+book::book(std::shared_ptr<morda::context> c, const puu::forest& desc) :
 		widget(std::move(c), desc),
 		pile(nullptr, puu::forest())
 {}
 
-void PageStack::push(std::shared_ptr<page> pg) {
+void book::push(std::shared_ptr<page> pg) {
 	if(!pg){
-		throw std::logic_error("PageStack: tried to push nullptr");
+		throw std::logic_error("book: tried to push nullptr");
 	}
 	
 	auto& lp = this->get_layout_params(*pg);
@@ -36,7 +36,7 @@ void PageStack::push(std::shared_ptr<page> pg) {
 	});
 }
 
-void PageStack::close(page& pg)noexcept{
+void book::close(page& pg)noexcept{
 	ASSERT(&pg.parentPageStack() != this)
 	
 	for(auto i = this->pages.begin(), e = this->pages.end(); i != e; ++i){
@@ -67,7 +67,7 @@ void PageStack::close(page& pg)noexcept{
 	}
 }
 
-PageStack::~PageStack()noexcept{
+book::~book()noexcept{
 	if(this->children().size() != 0){
 		ASSERT(this->children().size() == 1)
 		auto p = std::dynamic_pointer_cast<page>(this->children().front());

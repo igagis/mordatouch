@@ -5,12 +5,12 @@
 
 using namespace morda;
 
-PageStack& page::parentPageStack() {
+book& page::parentPageStack() {
 	if(!this->parent()){
-		throw std::logic_error("page: the page is not yet shown, i.e. not added to any PageStack");
+		throw std::logic_error("page: the page is not yet shown, i.e. not added to any book");
 	}
-	auto p = static_cast<PageStack*>(this->parent());
-	ASSERT(dynamic_cast<PageStack*>(this->parent()))
+	auto p = static_cast<book*>(this->parent());
+	ASSERT(dynamic_cast<book*>(this->parent()))
 	
 	return *p;
 }

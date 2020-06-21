@@ -6,7 +6,7 @@ namespace morda{
 
 class page;
 
-class PageStack :
+class book :
 		private pile,
 		public virtual widget
 {
@@ -14,14 +14,14 @@ class PageStack :
 	
 	std::vector<std::shared_ptr<page>> pages;
 public:
-	PageStack(std::shared_ptr<morda::context> c, const puu::forest& desc);
+	book(std::shared_ptr<morda::context> c, const puu::forest& desc);
 	
-	PageStack(const PageStack&) = delete;
-	PageStack& operator=(const PageStack&) = delete;
+	book(const book&) = delete;
+	book& operator=(const book&) = delete;
 	
 	void push(std::shared_ptr<page> page);
 	
-	~PageStack()noexcept;
+	~book()noexcept;
 private:
 
 	void close(page& page)noexcept;

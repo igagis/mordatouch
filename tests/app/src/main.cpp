@@ -21,12 +21,12 @@ public:
 		this->gui.context->loader.mount_res_pack(*this->get_res_file("res/"));
 //		this->ResMan().MountResPack(morda::ZipFile::New(papki::FSFile::New("res.zip")));
 
-		this->gui.context->inflater.register_widget<morda::PageStack>("PageStack");
+		this->gui.context->inflater.register_widget<morda::book>("book");
 
 //		auto c = morda::Morda::inst().inflater.inflate(
 //				*this->createResourceFileInterface("res/main.gui.stob")
 //			);
-		auto ps = std::make_shared<morda::PageStack>(this->gui.context, puu::forest());
+		auto ps = std::make_shared<morda::book>(this->gui.context, puu::forest());
 		this->gui.set_root(ps);
 
 		ps->push(std::make_shared<MainPage>(this->gui.context));

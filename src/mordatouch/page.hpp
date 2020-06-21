@@ -13,7 +13,7 @@ protected:
 	page(const page&) = delete;
 	page& operator=(const page&) = delete;
 	
-	PageStack& parentPageStack();
+	book& parentPageStack();
 public:
 	virtual void onShow(){}
 	virtual void onHide(){}
