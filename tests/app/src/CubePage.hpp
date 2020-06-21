@@ -1,17 +1,17 @@
 #pragma once
 
-#include <morda/widgets/group/Pile.hpp>
-#include <morda/Updateable.hpp>
+#include <morda/widgets/group/pile.hpp>
+#include <morda/updateable.hpp>
 
 #include "../../../src/mordatouch/Page.hpp"
 
 class CubePage :
 		public morda::Page,
-		public morda::Pile
+		public morda::pile
 {
-	std::shared_ptr<morda::Updateable> cube;
+	std::shared_ptr<morda::updateable> cube;
 public:
-	CubePage();
+	CubePage(std::shared_ptr<morda::context> c);
 	
 	CubePage(const CubePage&) = delete;
 	CubePage& operator=(const CubePage&) = delete;

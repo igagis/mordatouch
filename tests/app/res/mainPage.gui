@@ -1,7 +1,7 @@
-PushButton{
+@push_button{
 	id{main_button}
 
-	Text{
+	@text{
 		text{Hello!}
 	}
 }

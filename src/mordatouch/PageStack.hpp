@@ -1,20 +1,20 @@
 #pragma once
 
-#include <morda/widgets/group/Pile.hpp>
+#include <morda/widgets/group/pile.hpp>
 
 namespace morda{
 
 class Page;
 
 class PageStack :
-		private Pile,
-		public virtual Widget
+		private pile,
+		public virtual widget
 {
 	friend class Page;
 	
 	std::vector<std::shared_ptr<Page>> pages;
 public:
-	PageStack(const stob::Node* chain = nullptr);
+	PageStack(std::shared_ptr<morda::context> c, const puu::forest& desc);
 	
 	PageStack(const PageStack&) = delete;
 	PageStack& operator=(const PageStack&) = delete;

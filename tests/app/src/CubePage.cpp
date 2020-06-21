@@ -1,81 +1,80 @@
 #include "../../../src/mordatouch/Page.hpp"
 
-#include <morda/Updateable.hpp>
-#include <morda/res/ResTexture.hpp>
-#include <morda/render/Renderer.hpp>
-#include <morda/Morda.hpp>
-#include <morda/widgets/button/PushButton.hpp>
+#include <morda/context.hpp>
+#include <morda/updateable.hpp>
+#include <morda/res/texture.hpp>
+#include <morda/render/renderer.hpp>
+#include <morda/widgets/button/push_button.hpp>
 
 #include <GLES2/gl2.h>
-
 
 #include "CubePage.hpp"
 
 namespace{
 
-class CubeWidget : public morda::Widget, public morda::Updateable{
-	std::shared_ptr<morda::ResTexture> tex;
+class CubeWidget : public morda::widget, public morda::updateable{
+	std::shared_ptr<morda::res::texture> tex;
 	
-	morda::Quatr rot = morda::Quatr().identity();
+	morda::quaternion rot = morda::quaternion().identity();
 public:
-	std::shared_ptr<morda::VertexArray> cubeVAO;
+	std::shared_ptr<morda::vertex_array> cubeVAO;
 	
-	CubeWidget(const stob::Node* desc) :
-			Widget(desc)
+	CubeWidget(std::shared_ptr<morda::context> c) :
+			widget(std::move(c), puu::forest())
 	{
-		std::array<morda::Vec3r, 36> cubePos = {{
-			kolme::Vec3f(-1, -1, 1), kolme::Vec3f(1, -1, 1), kolme::Vec3f(-1, 1, 1),
-			kolme::Vec3f(1, -1, 1), kolme::Vec3f(1, 1, 1), kolme::Vec3f(-1, 1, 1),
+		std::array<morda::vector3, 36> cubePos = {{
+			r4::vec3f(-1, -1, 1), r4::vec3f(1, -1, 1), r4::vec3f(-1, 1, 1),
+			r4::vec3f(1, -1, 1), r4::vec3f(1, 1, 1), r4::vec3f(-1, 1, 1),
 			
-			kolme::Vec3f(1, -1, 1), kolme::Vec3f(1, -1, -1), kolme::Vec3f(1, 1, 1),
-			kolme::Vec3f(1, -1, -1), kolme::Vec3f(1, 1, -1), kolme::Vec3f(1, 1, 1),
+			r4::vec3f(1, -1, 1), r4::vec3f(1, -1, -1), r4::vec3f(1, 1, 1),
+			r4::vec3f(1, -1, -1), r4::vec3f(1, 1, -1), r4::vec3f(1, 1, 1),
 			
-			kolme::Vec3f(1, -1, -1), kolme::Vec3f(-1, -1, -1), kolme::Vec3f(1, 1, -1),
-			kolme::Vec3f(-1, -1, -1), kolme::Vec3f(-1, 1, -1), kolme::Vec3f(1, 1, -1),
+			r4::vec3f(1, -1, -1), r4::vec3f(-1, -1, -1), r4::vec3f(1, 1, -1),
+			r4::vec3f(-1, -1, -1), r4::vec3f(-1, 1, -1), r4::vec3f(1, 1, -1),
 			
-			kolme::Vec3f(-1, -1, -1), kolme::Vec3f(-1, -1, 1), kolme::Vec3f(-1, 1, -1),
-			kolme::Vec3f(-1, -1, 1), kolme::Vec3f(-1, 1, 1), kolme::Vec3f(-1, 1, -1),
+			r4::vec3f(-1, -1, -1), r4::vec3f(-1, -1, 1), r4::vec3f(-1, 1, -1),
+			r4::vec3f(-1, -1, 1), r4::vec3f(-1, 1, 1), r4::vec3f(-1, 1, -1),
 			
-			kolme::Vec3f(-1, 1, -1), kolme::Vec3f(-1, 1, 1), kolme::Vec3f(1, 1, -1),
-			kolme::Vec3f(-1, 1, 1), kolme::Vec3f(1, 1, 1), kolme::Vec3f(1, 1, -1),
+			r4::vec3f(-1, 1, -1), r4::vec3f(-1, 1, 1), r4::vec3f(1, 1, -1),
+			r4::vec3f(-1, 1, 1), r4::vec3f(1, 1, 1), r4::vec3f(1, 1, -1),
 			
-			kolme::Vec3f(-1, -1, -1), kolme::Vec3f(1, -1, -1), kolme::Vec3f(-1, -1, 1),
-			kolme::Vec3f(-1, -1, 1), kolme::Vec3f(1, -1, -1), kolme::Vec3f(1, -1, 1)
+			r4::vec3f(-1, -1, -1), r4::vec3f(1, -1, -1), r4::vec3f(-1, -1, 1),
+			r4::vec3f(-1, -1, 1), r4::vec3f(1, -1, -1), r4::vec3f(1, -1, 1)
 		}};
 		
-		auto posVBO = morda::inst().renderer().factory->createVertexBuffer(utki::wrapBuf(cubePos));
+		auto posVBO = this->context->renderer->factory->create_vertex_buffer(utki::make_span(cubePos));
 		
-		std::array<kolme::Vec2f, 36> cubeTex = {{
-			kolme::Vec2f(0, 0), kolme::Vec2f(1, 0), kolme::Vec2f(0, 1),
-			kolme::Vec2f(1, 0), kolme::Vec2f(1, 1), kolme::Vec2f(0, 1),
+		std::array<r4::vec2f, 36> cubeTex = {{
+			r4::vec2f(0, 0), r4::vec2f(1, 0), r4::vec2f(0, 1),
+			r4::vec2f(1, 0), r4::vec2f(1, 1), r4::vec2f(0, 1),
 			
-			kolme::Vec2f(0, 0), kolme::Vec2f(1, 0), kolme::Vec2f(0, 1),
-			kolme::Vec2f(1, 0), kolme::Vec2f(1, 1), kolme::Vec2f(0, 1),
+			r4::vec2f(0, 0), r4::vec2f(1, 0), r4::vec2f(0, 1),
+			r4::vec2f(1, 0), r4::vec2f(1, 1), r4::vec2f(0, 1),
 			
-			kolme::Vec2f(0, 0), kolme::Vec2f(1, 0), kolme::Vec2f(0, 1),
-			kolme::Vec2f(1, 0), kolme::Vec2f(1, 1), kolme::Vec2f(0, 1),
+			r4::vec2f(0, 0), r4::vec2f(1, 0), r4::vec2f(0, 1),
+			r4::vec2f(1, 0), r4::vec2f(1, 1), r4::vec2f(0, 1),
 		
-			kolme::Vec2f(0, 0), kolme::Vec2f(1, 0), kolme::Vec2f(0, 1),
-			kolme::Vec2f(1, 0), kolme::Vec2f(1, 1), kolme::Vec2f(0, 1),
+			r4::vec2f(0, 0), r4::vec2f(1, 0), r4::vec2f(0, 1),
+			r4::vec2f(1, 0), r4::vec2f(1, 1), r4::vec2f(0, 1),
 			
-			kolme::Vec2f(0, 0), kolme::Vec2f(1, 0), kolme::Vec2f(0, 1),
-			kolme::Vec2f(1, 0), kolme::Vec2f(1, 1), kolme::Vec2f(0, 1),
+			r4::vec2f(0, 0), r4::vec2f(1, 0), r4::vec2f(0, 1),
+			r4::vec2f(1, 0), r4::vec2f(1, 1), r4::vec2f(0, 1),
 			
-			kolme::Vec2f(0, 0), kolme::Vec2f(1, 0), kolme::Vec2f(0, 1),
-			kolme::Vec2f(1, 0), kolme::Vec2f(1, 1), kolme::Vec2f(0, 1)
+			r4::vec2f(0, 0), r4::vec2f(1, 0), r4::vec2f(0, 1),
+			r4::vec2f(1, 0), r4::vec2f(1, 1), r4::vec2f(0, 1)
 		}};
 		
-		auto texVBO = morda::inst().renderer().factory->createVertexBuffer(utki::wrapBuf(cubeTex));
+		auto texVBO = this->context->renderer->factory->create_vertex_buffer(utki::make_span(cubeTex));
 		
 		std::array<std::uint16_t, 36> indices = {{
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
 		}};
 		
-		auto cubeIndices = morda::inst().renderer().factory->createIndexBuffer(utki::wrapBuf(indices));
+		auto cubeIndices = this->context->renderer->factory->create_index_buffer(utki::make_span(indices));
 		
-		this->cubeVAO = morda::inst().renderer().factory->createVertexArray({posVBO, texVBO}, cubeIndices, morda::VertexArray::Mode_e::TRIANGLES);
+		this->cubeVAO = this->context->renderer->factory->create_vertex_array({posVBO, texVBO}, cubeIndices, morda::vertex_array::mode::triangles);
 		
-		this->tex = morda::Morda::inst().resMan.load<morda::ResTexture>("tex_sample");
+		this->tex = this->context->loader.load<morda::res::texture>("tex_sample");
 		this->rot.identity();
 		
 		
@@ -87,82 +86,80 @@ public:
 	void update(std::uint32_t dt) override{
 		this->fpsSecCounter += dt;
 		++this->fps;
-		this->rot %= morda::Quatr().initRot(kolme::Vec3f(1, 2, 1).normalize(), 1.5f * (float(dt) / 1000));
+		this->rot %= morda::quaternion().rotation(r4::vec3f(1, 2, 1).normalize(), 1.5f * (float(dt) / 1000));
 		if(this->fpsSecCounter >= 1000){
 			TRACE_ALWAYS(<< "fps = " << std::dec << fps << std::endl)
 			this->fpsSecCounter = 0;
 			this->fps = 0;
 		}
-		this->clearCache();
+		this->clear_cache();
 	}
 	
-	void render(const morda::Matr4r& matrix)const override{
-		this->Widget::render(matrix);
+	void render(const morda::matrix4& matrix)const override{
+		this->widget::render(matrix);
 		
-		morda::Matr4r matr(matrix);
+		morda::matrix4 matr(matrix);
 		matr.scale(this->rect().d / 2);
 		matr.translate(1, 1);
 		matr.scale(1, -1);
 		
 		matr.frustum(-2, 2, -1.5, 1.5, 2, 100);
 		
-		morda::Matr4r m(matr);
+		morda::matrix4 m(matr);
 		m.translate(0, 0, -4);
 		
 		m.rotate(this->rot);
 
 		glEnable(GL_CULL_FACE);
 		
-		morda::inst().renderer().shader->posTex->render(m, *this->cubeVAO, this->tex->tex());
+		this->context->renderer->shader->pos_tex->render(m, *this->cubeVAO, this->tex->tex());
 		
 		glDisable(GL_CULL_FACE);
 	}
 };
-
 }
 
-
-
-CubePage::CubePage() :
-		Widget(nullptr),
-		Pile(stob::parse(R"qwertyuiop(
-				Column{
+CubePage::CubePage(std::shared_ptr<morda::context> c) :
+		widget(std::move(c), puu::forest()),
+		Page(this->context, puu::forest()),
+		pile(this->context, puu::read(R"qwertyuiop(
+				@column{
 					layout{
 						dx{fill}dy{fill}
 					}
-					Widget{
+					@widget{
 						id{placeholder}
 						layout{dx{fill}dy{0}weight{1}}
 					}
-					Text{text{"cube page"}}
-					PushButton{
-						Text{
+					@text{text{"cube page"}}
+					@push_button{
+						id{back_button}
+						@text{
 							text{back}
 						}
-						id{back_button}
 					}
 				}
-			)qwertyuiop").get())
+			)qwertyuiop"))
 {
-	auto ph = this->findByName("placeholder");
+	auto& ph = this->get_widget("placeholder");
 	
-	this->findByNameAs<morda::PushButton>("back_button")->clicked = [this](morda::PushButton&){
+	this->get_widget_as<morda::push_button>("back_button").click_handler = [this](morda::push_button&){
 		this->close();
 	};
 	
-	auto c = utki::makeShared<CubeWidget>(nullptr);
-	this->cube = c;
+	auto cw = std::make_shared<CubeWidget>(this->context);
+	this->cube = cw;
 	
-	c->setCache(true);
+	cw->set_cache(true);
 	
-	ph->replaceBy(c);
+	ph.replace_by(cw);
 }
 
 void CubePage::onShow() {
-	this->cube->startUpdating(0);
+	this->context->updater->start(this->cube, 0);
 }
 
 void CubePage::onHide() {
-	this->cube->stopUpdating();
+	this->context->updater->stop(*this->cube);
 }
 

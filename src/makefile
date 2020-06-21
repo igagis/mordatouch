@@ -20,7 +20,7 @@ this_cxxflags += -g #include debugging symbols
 this_cxxflags += -std=c++11
 this_cxxflags += -fPIC
 
-this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -lstob -rdynamic -lm
+this_ldlibs += -lmordavokne-opengles2 -lstdc++ -lmorda -rdynamic -lm
 
 this_out_dir := build
 

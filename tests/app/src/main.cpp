@@ -1,35 +1,35 @@
-#include <mordavokne/AppFactory.hpp>
-#include <morda/widgets/button/NinePatchPushButton.hpp>
+#include <mordavokne/application.hpp>
+#include <morda/widgets/button/nine_patch_push_button.hpp>
 
 #include "../../../src/mordatouch/PageStack.hpp"
 #include "../../../src/mordatouch/Page.hpp"
 #include "MainPage.hpp"
 
 
-class Application : public mordavokne::App{
-	static mordavokne::App::WindowParams GetWindowParams()noexcept{
-		mordavokne::App::WindowParams wp(kolme::Vec2ui(320, 480));
+class Application : public mordavokne::application{
+	static mordavokne::window_params GetWindowParams()noexcept{
+		mordavokne::window_params wp(r4::vec2ui(320, 480));
 
 		return wp;
 	}
 public:
 	Application() :
-			App("mordatouch-test", GetWindowParams())
+			application("mordatouch-test", GetWindowParams())
 	{
-		morda::inst().initStandardWidgets(*this->getResFile());
+		this->gui.initStandardWidgets(*this->get_res_file());
 
-		morda::inst().resMan.mountResPack(*this->getResFile("res/"));
+		this->gui.context->loader.mount_res_pack(*this->get_res_file("res/"));
 //		this->ResMan().MountResPack(morda::ZipFile::New(papki::FSFile::New("res.zip")));
 
-		morda::inst().inflater.addWidget<morda::PageStack>("PageStack");
+		this->gui.context->inflater.register_widget<morda::PageStack>("PageStack");
 
 //		auto c = morda::Morda::inst().inflater.inflate(
 //				*this->createResourceFileInterface("res/main.gui.stob")
 //			);
-		auto ps = utki::makeShared<morda::PageStack>();
-		morda::Morda::inst().setRootWidget(ps);
+		auto ps = std::make_shared<morda::PageStack>(this->gui.context, puu::forest());
+		this->gui.set_root(ps);
 
-		ps->push(utki::makeShared<MainPage>());
+		ps->push(std::make_shared<MainPage>(this->gui.context));
 
 //		morda::Morda::inst().setRootWidget(
 //				morda::inst().inflater.inflate(*stob::parse("PushButton{TextLabel{text{Hello}}}"))
@@ -37,8 +37,6 @@ public:
 	}
 };
 
-
-
-std::unique_ptr<mordavokne::App> mordavokne::createApp(int argc, const char** argv){
-	return utki::makeUnique<Application>();
+std::unique_ptr<mordavokne::application> mordavokne::create_application(int argc, const char** argv){
+	return std::make_unique<Application>();
 }
