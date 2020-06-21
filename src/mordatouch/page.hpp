@@ -13,11 +13,11 @@ protected:
 	page(const page&) = delete;
 	page& operator=(const page&) = delete;
 	
-	book& parentPageStack();
+	book& parent_book();
 public:
-	virtual void onShow(){}
-	virtual void onHide(){}
-	virtual void onClose()noexcept{}
+	virtual void on_show(){}
+	virtual void on_hide(){}
+	virtual void on_close()noexcept{}
 	
 	void close()noexcept;
 private:

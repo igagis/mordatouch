@@ -12,6 +12,6 @@ MainPage::MainPage(std::shared_ptr<morda::context> c) :
 {
 	auto& b = this->get_widget_as<morda::push_button>("main_button");
 	b.click_handler = [this](morda::push_button& b){
-		this->parentPageStack().push(std::make_shared<CubePage>(this->context));
+		this->parent_book().push(std::make_shared<CubePage>(this->context));
 	};
 }

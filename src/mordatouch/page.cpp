@@ -5,7 +5,7 @@
 
 using namespace morda;
 
-book& page::parentPageStack() {
+book& page::parent_book() {
 	if(!this->parent()){
 		throw std::logic_error("page: the page is not yet shown, i.e. not added to any book");
 	}
@@ -21,6 +21,6 @@ page::page(std::shared_ptr<morda::context> c, const puu::forest& desc) :
 
 void page::close()noexcept{
 	this->context->run_from_ui_thread([this](){
-		this->parentPageStack().close(*this);
+		this->parent_book().close(*this);
 	});
 }

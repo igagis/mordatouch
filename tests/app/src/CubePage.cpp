@@ -155,10 +155,10 @@ CubePage::CubePage(std::shared_ptr<morda::context> c) :
 	ph.replace_by(cw);
 }
 
-void CubePage::onShow() {
+void CubePage::on_show() {
 	this->context->updater->start(this->cube, 0);
 }
 
-void CubePage::onHide() {
+void CubePage::on_hide() {
 	this->context->updater->stop(*this->cube);
 }

@@ -16,8 +16,8 @@ public:
 	CubePage(const CubePage&) = delete;
 	CubePage& operator=(const CubePage&) = delete;
 	
-	void onShow() override;
-	void onHide() override;
+	void on_show() override;
+	void on_hide() override;
 	
 private:
 

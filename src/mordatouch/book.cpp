@@ -27,12 +27,12 @@ void book::push(std::shared_ptr<page> pg) {
 			auto p = std::dynamic_pointer_cast<morda::page>(ps->children().front());
 			ASSERT(p)
 			ps->erase(ps->children().begin());
-			p->onHide();
+			p->on_hide();
 			ps->pages.push_back(p);
 		}
 
 		ps->push_back(pg);
-		pg->onShow();
+		pg->on_show();
 	});
 }
 
@@ -41,7 +41,7 @@ void book::close(page& pg)noexcept{
 	
 	for(auto i = this->pages.begin(), e = this->pages.end(); i != e; ++i){
 		if((*i).operator->() == &pg){
-			(*i)->onClose();
+			(*i)->on_close();
 			this->pages.erase(i);
 			return;
 		}
@@ -58,11 +58,11 @@ void book::close(page& pg)noexcept{
 
 	this->erase(this->children().begin());
 	
-	p->onClose();
+	p->on_close();
 	
 	if(this->pages.size() != 0){
 		this->push_back(this->pages.back());
-		this->pages.back()->onShow();
+		this->pages.back()->on_show();
 		this->pages.pop_back();
 	}
 }
@@ -75,10 +75,10 @@ book::~book()noexcept{
 
 		this->erase(this->children().begin());
 
-		p->onClose();
+		p->on_close();
 	}
 	
 	for(auto i = this->pages.rbegin(), e = this->pages.rend(); i != e; ++i){
-		(*i)->onClose();
+		(*i)->on_close();
 	}
 }
