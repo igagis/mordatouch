@@ -2,10 +2,10 @@
 
 #include <morda/widgets/group/pile.hpp>
 
-#include "../../../src/mordatouch/Page.hpp"
+#include "../../../src/mordatouch/page.hpp"
 
 class MainPage :
-		public morda::Page,
+		public morda::page,
 		private morda::pile
 {
 public:

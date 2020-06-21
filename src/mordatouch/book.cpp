@@ -1,8 +1,8 @@
-#include "PageStack.hpp"
+#include "book.hpp"
 
 #include <morda/context.hpp>
 
-#include "Page.hpp"
+#include "page.hpp"
 
 using namespace morda;
 
@@ -11,36 +11,36 @@ PageStack::PageStack(std::shared_ptr<morda::context> c, const puu::forest& desc)
 		pile(nullptr, puu::forest())
 {}
 
-void PageStack::push(std::shared_ptr<Page> page) {
-	if(!page){
+void PageStack::push(std::shared_ptr<page> pg) {
+	if(!pg){
 		throw std::logic_error("PageStack: tried to push nullptr");
 	}
 	
-	auto& lp = this->get_layout_params(*page);
+	auto& lp = this->get_layout_params(*pg);
 	lp.dims.set(widget::layout_params::fill);
 	
 	auto ps = utki::make_shared_from_this(*this);
 	
-	this->context->run_from_ui_thread([ps, page](){
+	this->context->run_from_ui_thread([ps, pg](){
 		if(ps->children().size() != 0){
 			ASSERT(ps->children().size() == 1)
-			auto p = std::dynamic_pointer_cast<Page>(ps->children().front());
+			auto p = std::dynamic_pointer_cast<morda::page>(ps->children().front());
 			ASSERT(p)
 			ps->erase(ps->children().begin());
 			p->onHide();
 			ps->pages.push_back(p);
 		}
 
-		ps->push_back(page);
-		page->onShow();
+		ps->push_back(pg);
+		pg->onShow();
 	});
 }
 
-void PageStack::close(Page& page)noexcept{
-	ASSERT(&page.parentPageStack() != this)
+void PageStack::close(page& pg)noexcept{
+	ASSERT(&pg.parentPageStack() != this)
 	
 	for(auto i = this->pages.begin(), e = this->pages.end(); i != e; ++i){
-		if((*i).operator->() == &page){
+		if((*i).operator->() == &pg){
 			(*i)->onClose();
 			this->pages.erase(i);
 			return;
@@ -52,9 +52,9 @@ void PageStack::close(Page& page)noexcept{
 	}
 	
 	ASSERT(this->children().size() == 1)
-	auto p = std::dynamic_pointer_cast<Page>(this->children().front());
+	auto p = std::dynamic_pointer_cast<morda::page>(this->children().front());
 	ASSERT(p)
-	ASSERT(p.operator->() == &page)
+	ASSERT(p.operator->() == &pg)
 
 	this->erase(this->children().begin());
 	
@@ -70,7 +70,7 @@ void PageStack::close(Page& page)noexcept{
 PageStack::~PageStack()noexcept{
 	if(this->children().size() != 0){
 		ASSERT(this->children().size() == 1)
-		auto p = std::dynamic_pointer_cast<Page>(this->children().front());
+		auto p = std::dynamic_pointer_cast<page>(this->children().front());
 		ASSERT(p)
 
 		this->erase(this->children().begin());

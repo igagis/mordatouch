@@ -2,16 +2,16 @@
 
 #include <morda/widgets/widget.hpp>
 
-#include "PageStack.hpp"
+#include "book.hpp"
 
 namespace morda{
 
-class Page : public virtual widget{
+class page : public virtual widget{
 protected:
-	Page(std::shared_ptr<morda::context> c, const puu::forest& desc);
+	page(std::shared_ptr<morda::context> c, const puu::forest& desc);
 	
-	Page(const Page&) = delete;
-	Page& operator=(const Page&) = delete;
+	page(const page&) = delete;
+	page& operator=(const page&) = delete;
 	
 	PageStack& parentPageStack();
 public:

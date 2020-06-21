@@ -7,7 +7,7 @@
 
 MainPage::MainPage(std::shared_ptr<morda::context> c) :
 		widget(std::move(c), puu::forest()),
-		Page(this->context, puu::forest()),
+		page(this->context, puu::forest()),
 		pile(this->context, puu::read(*mordavokne::inst().get_res_file("res/mainPage.gui")))
 {
 	auto& b = this->get_widget_as<morda::push_button>("main_button");

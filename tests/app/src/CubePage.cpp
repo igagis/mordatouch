@@ -1,4 +1,4 @@
-#include "../../../src/mordatouch/Page.hpp"
+#include "../../../src/mordatouch/page.hpp"
 
 #include <morda/context.hpp>
 #include <morda/updateable.hpp>
@@ -121,7 +121,7 @@ public:
 
 CubePage::CubePage(std::shared_ptr<morda::context> c) :
 		widget(std::move(c), puu::forest()),
-		Page(this->context, puu::forest()),
+		page(this->context, puu::forest()),
 		pile(this->context, puu::read(R"qwertyuiop(
 				@column{
 					layout{
@@ -162,4 +162,3 @@ void CubePage::onShow() {
 void CubePage::onHide() {
 	this->context->updater->stop(*this->cube);
 }
-

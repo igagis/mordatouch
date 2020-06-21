@@ -3,10 +3,10 @@
 #include <morda/widgets/group/pile.hpp>
 #include <morda/updateable.hpp>
 
-#include "../../../src/mordatouch/Page.hpp"
+#include "../../../src/mordatouch/page.hpp"
 
 class CubePage :
-		public morda::Page,
+		public morda::page,
 		public morda::pile
 {
 	std::shared_ptr<morda::updateable> cube;

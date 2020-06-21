@@ -1,8 +1,8 @@
 #include <mordavokne/application.hpp>
 #include <morda/widgets/button/nine_patch_push_button.hpp>
 
-#include "../../../src/mordatouch/PageStack.hpp"
-#include "../../../src/mordatouch/Page.hpp"
+#include "../../../src/mordatouch/book.hpp"
+#include "../../../src/mordatouch/page.hpp"
 #include "MainPage.hpp"
 
 
