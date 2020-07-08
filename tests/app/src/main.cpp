@@ -1,8 +1,7 @@
 #include <mordavokne/application.hpp>
 #include <morda/widgets/button/nine_patch_push_button.hpp>
 
-#include "../../../src/mordatouch/book.hpp"
-#include "../../../src/mordatouch/page.hpp"
+#include <morda/widgets/group/book.hpp>
 #include "MainPage.hpp"
 
 
@@ -20,8 +19,6 @@ public:
 
 		this->gui.context->loader.mount_res_pack(*this->get_res_file("res/"));
 //		this->ResMan().MountResPack(morda::ZipFile::New(papki::FSFile::New("res.zip")));
-
-		this->gui.context->inflater.register_widget<morda::book>("book");
 
 //		auto c = morda::Morda::inst().inflater.inflate(
 //				*this->createResourceFileInterface("res/main.gui.stob")

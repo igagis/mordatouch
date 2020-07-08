@@ -1,4 +1,4 @@
-#include "../../../src/mordatouch/page.hpp"
+#include <morda/widgets/group/book.hpp>
 
 #include <morda/context.hpp>
 #include <morda/updateable.hpp>
@@ -144,7 +144,7 @@ CubePage::CubePage(std::shared_ptr<morda::context> c) :
 	auto& ph = this->get_widget("placeholder");
 	
 	this->get_widget_as<morda::push_button>("back_button").click_handler = [this](morda::push_button&){
-		this->close();
+		this->tear_out();
 	};
 	
 	auto cw = std::make_shared<CubeWidget>(this->context);
@@ -159,6 +159,6 @@ void CubePage::on_show() {
 	this->context->updater->start(this->cube, 0);
 }
 
-void CubePage::on_hide() {
+void CubePage::on_hide()noexcept {
 	this->context->updater->stop(*this->cube);
 }

@@ -2,7 +2,7 @@
 
 #include <morda/widgets/group/pile.hpp>
 
-#include "../../../src/mordatouch/page.hpp"
+#include <morda/widgets/group/book.hpp>
 
 class MainPage :
 		public morda::page,

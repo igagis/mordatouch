@@ -3,7 +3,7 @@
 #include <morda/widgets/group/pile.hpp>
 #include <morda/updateable.hpp>
 
-#include "../../../src/mordatouch/page.hpp"
+#include <morda/widgets/group/book.hpp>
 
 class CubePage :
 		public morda::page,
@@ -17,7 +17,7 @@ public:
 	CubePage& operator=(const CubePage&) = delete;
 	
 	void on_show() override;
-	void on_hide() override;
+	void on_hide()noexcept override;
 	
 private:
 
